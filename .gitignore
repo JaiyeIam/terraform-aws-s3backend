@@ -32,3 +32,14 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Additional sections
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Visual Studio Code files
+.vscode
+
+# Ignore all terraform related files
+terraform
