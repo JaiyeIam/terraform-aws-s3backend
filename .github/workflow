@@ -1,0 +1,34 @@
+name: Sync to GitLab
+
+on:
+  push:
+    branches:
+      - main  # Adjust this if you are using a different branch
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Automatically use the latest version
+        with:
+          fetch-depth: 0  # Perform a full clone
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull from GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/dev_iam/mymicroservice-cicd.git
+          git fetch gitlab
+          git merge -X ours gitlab/main || echo "Merge conflicts resolved using ours strategy"
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git push gitlab main
