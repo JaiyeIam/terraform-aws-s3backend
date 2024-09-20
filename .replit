@@ -1,0 +1,6 @@
+run = "got add"
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "got add"]
